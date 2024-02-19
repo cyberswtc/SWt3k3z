@@ -1,0 +1,6 @@
+mysqldump -h 34.41.112.254 -u wp --port 3306 -p driftingdatabase > backup.sql
+sudo tar -cpzvf wordpress.tar.gz /var/www/html/wordpress/
+sudo mv wordpress.tar.gz backupwp.tar.gz
+sudo tar -cpzvf ./$(date +%Y%m%d).tar.gz backup*
+sudo rm backup*
+gcloud storage mv /home/ubuntu/*.gz gs://finalbackupbucket/Backups 
