@@ -1,0 +1,21 @@
+TrueNAS
+Check that they have TrueNAS
+Change network adapter to pod name vlan
+make sure connected
+
+Firewall
+Change firewall network 2 to pod name vlan
+make sure connected
+
+Completed
+2318
+2320
+2321
+2322
+2323
+2324
+2325
+2326
+2327
+2328
+2329
