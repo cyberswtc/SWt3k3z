@@ -1,0 +1,38 @@
+(This was originally made for CentOS 6.10 but should be similar on RHEL 9.3 - not exact verbiage but close)
+
+Install the syslog package if it's not installed:
+yum -y install rsyslog
+
+vi (or nano) /etc/rsyslog.conf
+
+Un-comment (remove the #) from the following sections:
+
+"Provides UDP syslog reception"
+
+#$ModLoad imudp
+#$UDPServerRun 514
+
+"Provides TCP syslog reception"
+
+#$ModLoad imtcp
+#$InputTCPServerRun 514
+
+
+Should look like this:
+#Provides UDP syslog reception
+$ModLoad imudp
+$UDPServerRun 514
+
+#Provides TCP syslog reception
+$ModLoad imtcp
+$InputTCPServerRun 514
+
+- Restart the service.
+service rsyslog restart
+or systemctl restart rsyslog
+
+Verify ports are open and listening with
+netstat -antup | grep 514
+
+Check updated log using tail -f /var/log/messages
+Review the config to see where logs are sorted and stored.
