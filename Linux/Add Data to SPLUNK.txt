@@ -1,0 +1,17 @@
+Navigate to the Web UI:  http://IP_OF_SERVER:8000
+Login should be default or what you set it to at installation
+  admin:changeme
+
+Change PW: Administrator>Account Settings
+
+Add DATA INPUT (/var/log/messages)
+Settings>Data Inputs
+  Files & Directories
+    New Local File & Directory
+      Browse (type into field: "/var/log/messages")
+      NEXT
+      Source Type=Default
+      Save As... rsyslog
+      NEXT/Save
+      Review
+      Submit>
