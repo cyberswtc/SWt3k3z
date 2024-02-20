@@ -37,5 +37,8 @@ or systemctl restart rsyslog
 Verify ports are open and listening with
 netstat -antup | grep 514
 
+# Give read access to everyone on system:
+chmod +r /var/log/messages
+
 Check updated log using tail -f /var/log/messages
 Review the config to see where logs are sorted and stored.
