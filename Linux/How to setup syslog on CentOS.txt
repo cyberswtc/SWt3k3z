@@ -1,0 +1,9 @@
+Instructions for how to configure syslog on CentOS
+
+In /etc/rsyslog.conf add *.* @172.20.241.20
+
+Make sure the hostname is correct in /etc/hostname
+Example: FedoraWebmail.localdomain
+
+Test using Logger: logger "HELLO THERE"
+
