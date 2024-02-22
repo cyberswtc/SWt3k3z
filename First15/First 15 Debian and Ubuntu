@@ -1,0 +1,39 @@
+1.	Change password for both user and root account
+a.	passwd command
+2.	Disable login for root
+a.	Make sure sysadmin is a sudoer
+3.	Change root user’s Shell in /etc/passwd from root:x:0:0:root:/root:/bin/bash
+	to
+	root:x:0:0:root:/root:/sbin/nologin
+4.	Setup Firewall (These commands in this order will drop all incoming traffic except DNS and NTP. These will also allow all outgoing traffic.) *Note: only open port 80 on Ubuntu instead of 53 and 123
+a.	iptables -P INPUT DROP 
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+iptables -L INPUT
+iptables -A INPUT -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -p udp --dport 123 -j ACCEPT
+sudo apt install iptables-persistent
+5.	Forward syslog and rsyslog to splunk
+a.	*.* @172.20.241.20 in /etc/rsyslog.conf file
+6.	Update both Debian and Ubuntu Machinesa
+a.	Sudo apt update
+b.	Sudo apt upgrade
+7.	Check users 
+a.	Cat /etc/passwd
+8.	Check /var/www/html on Ubuntu Web
+9.	Remove write permissions
+a.	chmod 0-w
+10.	Check shadow file
+a.	Sudo cat shadow
+11.	Check sudoers
+12.	Check cronjob
+a.	Cat /etc/crontab
+13.	Disable sshd
+a.	Sudo systemctl disable ssh
+14.	Make sure they have a default route configured
+a.	Netstat -rn
+15.	Backup etc folder
+a.	sudo tar -cvzf etc_backup.tar.gz /etc
+b.	sudo tar -xvzf etc_backup.tar.gz
+16.	install Fail2Ban
+a.	sudo apt install Fail2Ban
