@@ -1,0 +1,1 @@
+wget -O splunk-9.2.0-1fff88043d5f.x86_64.rpm "https://download.splunk.com/products/splunk/releases/9.2.0/linux/splunk-9.2.0-1fff88043d5f.x86_64.rpm"
