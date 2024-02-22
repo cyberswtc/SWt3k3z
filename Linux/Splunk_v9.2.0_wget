@@ -1,1 +1,4 @@
 wget -O splunk-9.2.0-1fff88043d5f.x86_64.rpm "https://download.splunk.com/products/splunk/releases/9.2.0/linux/splunk-9.2.0-1fff88043d5f.x86_64.rpm"
+
+Installing Splunk Enterprise on Linux:
+https://www.splunk.com/en_us/resources/videos/installing-splunk-enterprise-on-linux.html?301=/en_us/training/videos/installing-splunk-enterprise-on-linux.html
