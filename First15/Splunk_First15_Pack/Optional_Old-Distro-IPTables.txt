@@ -1,0 +1,28 @@
+Start by flushing the IP tables out and clearing existing settings.
+sudo iptables -F
+sudo iptables -X
+sudo iptables -Z
+
+
+Set the default policies to allow outgoing traffic and deny incoming traffic.
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT ACCEPT
+
+
+Splunk web service traffic (THIS IS WHAT THE SCORING ENGINE IS LOOKING FOR) - allow
+sudo iptables -A INPUT -p tcp --dport 8000 -j ACCEPT
+
+
+Remote syslog incoming traffic
+sudo iptables -A INPUT -p tcp --dport 514 -j ACCEPT
+sudo iptables -A INPUT -p udp --dport 514 -j ACCEPT
+
+
+Save the new settings
+sudo service iptables save
+sudo service iptables restart
+
+
+Command to review settings:
+iptables -L -n

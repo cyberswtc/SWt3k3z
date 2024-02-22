@@ -1,0 +1,21 @@
+Install screen if it's not already on - yum install screen
+
+ON THE REMOTE SYSTEM (Splunk), connect to JUMP BOX:
+sudo ssh student@linux.ncstech.org -R 50003:127.0.0.3:22
+
+ON YOUR LOCAL COMPUTER (charger tech laptop), connect to JUMP BOX:
+ssh student@linux.ncstech.org
+
+AFTER YOU LOGIN TO JUMP BOX, THEN RUN THIS ON JUMP BOX:
+ssh -p 50003 root@127.0.0.3
+
+
+**MUST BE CONNECTED TO NETLAB WIFI**
+ON THE REMOTE SYSTEM (Splunk), establish this connection to forward to a webpage:
+ssh -g student@linux.ncstech.org -R 8000:127.0.0.1:8000
+Then open a browser on the LOCAL COMPUTER and type in the IP of the Splunk server - 192.168.10.61:8000
+
+
+Start a new screen session with a name by using the command screen -S (session_name - name one jumpbox and the other webpage). Run the SSH connection in there first, then disconnect (it will keep running in the background) using the Ctl_A,D. You can then create another SSH tunnel connection in another screen session. To reattach to the screen sessions you list them using "screen -list" then pick the process you want to attach to and run "screen -r xxxxx".
+
+You can list screens with screen -ls
