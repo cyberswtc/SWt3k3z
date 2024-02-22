@@ -1,0 +1,28 @@
+CCDC – “First Fifteen” Checklist
+Splunk Station
+1.	CHANGE PASSWORDS. TAKE SCREENSHOTS OF THE UNALTERED FILES.
+a.	First, check the passwd binary to ensure that it has not been swapped out with password scraper. Use [whereis ] to locate the binary files and [ cat ] to see if they are in fact binary executables or Bash scripts. If cat shows a readable text file, something is wrong.
+b.	Review the /etc/passwd and /etc/shadow files to determine which users have logins.
+i.	You can use [ cat /etc/passwd | grep bash or cat/etc/passwd | grep -v nologin ] to exclude disabled/unaccessible accounts in /etc/passwd.
+ii.	You can use [ sudo awk -F: '{if ($2 != "*") print}' /etc/shadow ] to filter out daemon accounts that have no passwords (“*” in field 2 of the shadow file).
+c.	Change the passwords of accounts with logins, according to the team’s agreed-on password scheme, and record your station’s “extension” of the password on the board. (ex, Cvber123###_ _ _ or something else).
+d.	Recommended – disable the Root user entirely by changing the shell in the passwd file from “bash” to “nologin”.
+2.	CAPTURE SCREENSHOTS OF INITIAL STATES
+a.	The /etc/passwd file
+b.	Current listening connections [ netstat | grep LISTEN ]
+c.	Look for processes started recently or after the flag drop that you didn’t make [ ps aux ]
+3.	MAKE A BACKUP OF CONFIG FILES
+a.	Tarball the /etc folder. This command [ sudo tar czf splunk_etc_backup.tar.gz /etc ] will archive the entire /etc file into splunk_sysconfig_backup.tar.gz into the current working directory.
+b.	Secure shell copy the tarball to the local Linux box. [ scp splunk_etc_backup.tar.gz student@linux.ncstech.org ]
+4.	SET UP FIREWALL
+a.	sudo firewall-cmd --zone=public --add-masquerade –permanent
+b.	sudo firewall-cmd --zone=public --set-default=drop
+c.	sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
+d.	sudo firewall-cmd --zone=public --add-port=514/tcp --permanent
+e.	sudo firewall-cmd --zone=public --add-port=514/udp --permanent
+f.	sudo firewall-cmd –reload
+g.	(This is all assuming that the Splunk is on RHEL 9.3 – separate iptables doc will be attached for an older distro that doesn’t support frontend config).
+5.	CONFIGURE DEFAULT GW (If necessary)
+a.	ip route 0.0.0.0/0 172.20.241.254
+6.	START REMOTE SYSLOG SERVICE FOR LOG COLLECTION
+a.	Separate document included. May need adjustment because the Linux distro in the practice and invitational environments are not the same as the qualifier and beyond.
