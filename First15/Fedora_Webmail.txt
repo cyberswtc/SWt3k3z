@@ -1,0 +1,269 @@
+===Fedora_Webmail_Playbook===
+*KEY
+
+()-Fill on your own
+#-Comments
+$command
+!instruction
+
+==========================
+
+===disclaimer===
+
+#wors may be misspelled as there is no way to check spelling
+#some commands have not been tested
+#auth -Logan S.
+#version 2.0
+#updated feb/23/2024
+#feel free to update this
+!if you update the playbook -change the version number and change the date
+
+==========================
+
+===frist 3 before anything===
+
+#check if the password is a binary or a script-$less usr/bin/passwd
+-change password-$passwd (password)
+
+#if it has been compramised
+-$echo ('username:new_password') | sudo chpasswd
+
+#make a backup of the /etc/ and /var/ directorys
+-tar -czvf fedora_backup.tar.gz /etc /var
+
+#scp the file to the linux server
+-scp fedora_backup.tar.gz student@linux.ncstech.org:(/path/to/destination)
+
+==========================
+
+===set up fire wall===
+
+#update the firewall
+-$yum update firewalld?
+
+#start the firewall
+-$sudo systemctl start firewalld
+
+#enable filewall to presist after reboots
+-$sudo systemctl enable firewalld
+
+#add ports to firewall
+#add port 25 tcp and port 110 tcp
+-$sudo firewall-cmd --add-port=(port-number)/(port-type)
+
+#make changes persist after reboot
+-$sudo firewall-cmd --runtime-to-permanent
+
+#restart the server
+-$sudo systemctl restart firewalld
+
+#check if the service is running
+-$sudo systemctl status firewalld
+
+#to list all active services running
+-$sudo systemctl --type=service --state=running
+
+==========================
+
+===setup syslog monitoring to splunk===
+
+#edit the rsyslog conf file
+-$nano /etc/rsyslog.conf
+
+!add additional line for each log you want to send to syslog server in the rules tab
+authpric.*				(@172.20.241.20)
+*.*					(@172.20.241.20)
+
+#restart the service
+-$service rsyslog restart
+
+==========================
+
+===update the system===
+
+#update the package list
+-$sudo dnf update
+
+#restart sevices
+#dovecot, firewalld, postfix, 
+-$sudo systemctl restart (service) 
+
+===check persistence mechanisms===
+
+#check cronjobs
+-$crontab -l
+-$less /etc/cron.d/
+-$less /etc/crontab
+
+#check services
+-$less /etc/init.d
+
+#check bash shell startup
+-$less /etc/bash.bashrc
+-$less /etc/profile
+
+==========================
+
+===check log files===
+
+!Take a screenshot to compare with later
+
+#check syslogs
+-$tail -f /var/log/syslog
+
+#check authentication logs
+-$tail -f /var/log/auth.log
+
+#check maillog
+-$tail -f /var/log/maillog
+
+#check secure logs
+-$tail -f /var/log/secure
+
+#check messages
+-$tail -f /var/log/messages
+
+==========================
+
+===ssh jump box===
+
+#ON REMOTE SYSTEM connect to JUMP BOX
+-$sudo ssh student@linux.ncstech.org -R 55555:127.0.0.1:22
+
+#ON YOUR LOCAL WORKSTATION connect to JUMP BOX
+-$ssh student@linux.ncstech.org
+
+#AFTER YOU LOGIN TO JUMP BOX - RUN ON JUMP BOX
+-$ssh -p 50001 root@127.0.0.1
+
+==========================
+
+===how to retrieve the backups and extract them back===
+
+#how to scp the backups to you local workstation
+-$scp student@linux.ncstech.org:/fedora_backup.tar.gz /path/to/(destination)
+
+#to list the contents of the backup
+-$tar -tf fedora_backup.tar.gz
+
+#to extract the contents of the saved diretorys
+-$tar -xvkzf fedora_backup.tar.gz -C /etc
+-$tar -xvkzf fedora_backup.tar.gz -C /var
+
+==========================
+
+===how to set a manual ipaddress===
+
+#check your ipadress to confrim its incorrect
+-$ip a
+
+#identify the name of your network
+-$nmcli device status
+
+
+#set ip adress
+!use cider notation for the ipv4.address (ip-address) IE. 172.20.241.20/24
+-$sudo nmcli connection modify (interface-name) ipv4.method manual ipv4.address (ip-address) ipv4.gateway (gateway) ipv4.dns (dns1,dns2)
+
+#restart the service
+-$sudo systemctl restart networkmanger
+
+==========================
+
+===basic info===
+
+#the systemctl command
+-$systemctl status (service-name)
+-$sudo systemctl start (service-name)
+-$sudo systemctl stop (service-name)
+-$sudo systemctl restart (service-name)
+-$sudo systemctl enable (service-name)
+-$sudo systemctl disable (service-name)
+-$systemctl is-enabled (service-name)
+-$systemctl list-units --type=service --state=active
+
+!enable and disable means it will start on reboot the rest are self explatiory
+
+#how to display listing conntens 
+-$netstat -ltunp
+-l listing connections
+-t tcp connections
+-u udp connections
+-n display the numerical addresses and port numbers
+-p to show the pid 
+
+#to find where a command is stored 
+-$whereis (command)
+
+#if you need help with a command use these options
+-$man (command)
+-$info (command)
+-$(command) --help
+
+#to see how which man page you are seeing
+which (command)
+
+#to see diffrent man pages
+-$man -k (command)
+
+==========================
+
+===vi basics===
+
+#to use vi
+-$vi (file_name)
+
+#to exit vi and save in vi
+!press zz or :wq
+
+#to exit without saving
+!press :q!
+
+#cursor movement
+!h move left
+!j move down
+!k move up
+!l move right
+![return] move to the beginning of the next line
+!e end of next word or punk
+!E end of next word ignore punk
+!H move to the top of screen
+!m move to middle of screen
+!l move top bottom of screen
+
+#inserting
+!r replace charter
+!R replace charter untill you press [esc]
+!i insert mode
+!a append after cursor
+!A append before cursor
+
+#deleting 
+!x delete charter under cursor
+!dd delete line uder cursor
+!dw delete word under cursor
+!db delete word before cursor
+
+#copy code
+!yy yank 'copies' 
+
+#paste code
+!p bring back after cursor
+!P bring back before cursor
+
+#find commands
+!/ find a word going forword
+!? find word going backwords
+!f finds a charter on the line under the cursor going forward
+!F finds a charter on the line under the cursor going backwrds
+!t same as f but stop 1 charter after
+!T soame as F but stop 1 charter before
+!; repeat last f, F, t, T.
+
+#moveing
+!:# move to line #
+!:$ move to last line of file
+
+==========================
+
+===
